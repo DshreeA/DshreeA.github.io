@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Software Product Management Internship Recruitment Project</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="http://login2explore.com/jpdb/resources/js/0.0.3/jpdb-commons.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="style.css">
+        <style>
+            html {
+            height:100%;
+            }
+            
+            body {
+            margin:0;
+            }
+            
+            .bg {
+            animation:slide 3s ease-in-out infinite alternate;
+            background-image: linear-gradient(-60deg, #6c3 50%, #09f 50%);
+            bottom:0;
+            left:-50%;
+            opacity:.5;
+            position:fixed;
+            right:-50%;
+            top:0;
+            z-index:-1;
+            }
+            
+            .bg2 {
+            animation-direction:alternate-reverse;
+            animation-duration:4s;
+            }
+            
+            .bg3 {
+            animation-duration:5s;
+            }
+            @keyframes slide {
+            0% {
+                transform:translateX(-25%);
+            }
+            100% {
+                transform:translateX(25%);
+            }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="bg"></div>
+        <div class="bg bg2"></div>
+        <div class="bg bg3"></div>
+        <div class="back"></div>
+        <div class="registration-form">
+            <header>
+                <h1>Sign Up</h1>
+                <p>Made for Login2Xplore Software Product Management Internship , Recruitment Project </p>
+            </header>
+            <form>
+                <div class="input-section email-section"><input class="email" type="email" name="empEmail" id="empEmail" placeholder="ENTER EMPLOYEE E-MAIL HERE" autocomplete="off" />
+                    <div class="animated-button"><span class="icon-paper-plane"><i class="fa fa-envelope-o"></i></span><span class="next-button email"><i class="fa fa-arrow-up"></i></span></div>
+                </div>
+                <div class="input-section password-section folded"><input class="password" type="text" name="empId" id="empId" placeholder="ENTER EMPLOYEE-ID HERE" />
+                    <div class="animated-button"><span class="icon-lock"><i class="fa fa-envelope-o"></i></span><span class="next-button password"><i class="fa fa-arrow-up"></i></span></div>
+                </div>
+                <div class="input-section repeat-password-section folded"><input class="repeat-password" type="text" name="empName" id="empName" placeholder="ENTER EMPLOYEE NAME HERE" />
+                    <div class="animated-button"><span class="icon-repeat-lock"><i class="fa fa-envelope-o"></i></span><span class="next-button repeat-password"><i class="fa fa-arrow-up"></i></span></div>
+                </div>
+                <div class="input-section save-section folded"><input type="button" class="next-button save btn btn-primary" id="empSave" value="Save" onclick="saveEmployee();">
+                </div>
+                <div class="success">
+                    <p>Saved In JsonPowerDB -> The future of databases</p>
+                </div>
+            </form>
+        </div>
+        <script>
+            $("#empId").focus();
+            function validateAndGetFormData() 
+            {
+                var empIdVar = $("#empId").val();
+                if (empIdVar === "")
+                {
+                    alert("Employee ID Required Value");
+                    $("#empId").focus();
+                    return "";
+                }
+
+                var empNameVar = $("#empName").val();
+                if (empNameVar === "")
+                {
+                    alert("Employee Name is Required Value");
+                    $("#empName").focus();
+                    return "";
+                }
+
+                var empEmailVar = $("#empEmail").val();
+                if (empEmailVar === "")
+                {
+                    alert("Employee Email is Required Value");
+                    $("#empEmail").focus();
+                    return "";
+                }
+
+                var jsonStrObj = 
+                {
+                    empId: empIdVar,
+                    empName: empNameVar,
+                    empEmail: empEmailVar,
+                };
+
+                return JSON.stringify(jsonStrObj);
+            }
+            function resetForm()
+            {
+                $("#empId").val("")
+                $("#empName").val("");
+                $("#empEmail").val("");
+                $("#empId").focus();
+            }
+            function saveEmployee()
+            {
+                var jsonStr = validateAndGetFormData();
+                if (jsonStr === "")
+                {
+                    return;
+                }
+                var putReqStr = createPUTRequest("90935659|-31948837803333773|90935134", jsonStr, "EMPLOYEE", "EMP-REL");
+                jQuery.ajaxSetup({async: false});
+                var resultObj = executeCommandAtGivenBaseUrl(putReqStr, "http://api.login2explore.com:5577", "/api/iml");
+                jQuery.ajaxSetup({async: true});
+                resetForm();
+            }
+        </script>
+        <script>
+                $('.email').on("change keyup paste", function(){
+                if($(this).val()){
+                $('.icon-paper-plane').addClass("next");
+                } else {
+                $('.icon-paper-plane').removeClass("next");
+                }
+            }
+            );
+
+            $('.next-button').hover(
+            function(){
+                $(this).css('cursor', 'pointer');
+            }
+            );
+
+            $('.next-button.email').click(
+            function(){
+                console.log("Something");
+                $('.email-section').addClass("fold-up");
+                $('.password-section').removeClass("folded");
+            }
+            );
+
+            $('.password').on("change keyup paste",
+            function(){
+                if($(this).val()){
+                $('.icon-lock').addClass("next");
+                } else {
+                $('.icon-lock').removeClass("next");
+                }
+            }
+            );
+
+            $('.next-button').hover(
+            function(){
+                $(this).css('cursor', 'pointer');
+            }
+            );
+
+            $('.next-button.password').click(
+            function(){
+                console.log("Something");
+                $('.password-section').addClass("fold-up");
+                $('.repeat-password-section').removeClass("folded");
+            }
+            );
+
+            $('.repeat-password').on("change keyup paste",
+            function(){
+                if($(this).val()){
+                $('.icon-repeat-lock').addClass("next");
+                } else {
+                $('.icon-repeat-lock').removeClass("next");
+                }
+            }
+            );
+
+            $('.next-button').hover(
+            function(){
+                $(this).css('cursor', 'pointer');
+            }
+            );
+
+            $('.next-button.repeat-password').click(
+            function(){
+                console.log("Something");
+                $('.repeat-password-section').addClass("fold-up");
+                $('.save-section').removeClass("folded");
+            }
+            );
+
+            $('.save').on("change keyup paste",
+            function(){
+                if($(this).val()){
+                $('.icon-lock').addClass("next");
+                } else {
+                $('.icon-lock').removeClass("next");
+                }
+            }
+            );
+
+            $('.next-button.save').click(
+            function(){
+                console.log("Something");
+                $('.password-section').addClass("fold-up");
+                $('.success').css("marginTop", 0);
+            }
+            );
+        </script>
+    </body>
+</html>
